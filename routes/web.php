@@ -4,7 +4,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BlogController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\LogoutController;
 
 
@@ -18,13 +18,13 @@ Route::controller(RegisterController::class)->group(function () {
     Route::post('/register', 'register'); // ajax - 註冊帳號
 });
 
-Route::controller(BlogController::class)->group(function () {
+Route::controller(PostController::class)->group(function () {
     Route::get('/whats_new', 'whatsNew'); //whats new頁面
     Route::get('/my_world', 'myWorld'); //My World頁面
 
-    Route::post('/posts/create', 'createPosts'); // ajax - 建立貼文
-    Route::post('/posts/update', 'updatePosts'); // ajax - 編輯貼文
-    Route::post('/posts/delete', 'deletePosts'); // ajax - 刪除貼文
+    Route::post('/posts/create', 'createPost'); // ajax - 建立貼文
+    Route::post('/posts/update', 'updatePost'); // ajax - 編輯貼文
+    Route::post('/posts/delete', 'deletePost'); // ajax - 刪除貼文
 });
 
 Route::controller(LogoutController::class)->group(function () {

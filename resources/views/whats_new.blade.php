@@ -68,11 +68,11 @@
                 <div class="post">
                     <div class="post-author">
                         <img src="{{ asset('images/black_dog.jpg') }}" alt="Profile Photo" class="author-profile-photo">
-                        {{ $row->user_name }}
-                        <span class="post-date">{{ $row->updated_time}}</span>
+                        {{ $row['user_name'] }}
+                        <span class="post-date">{{ $row['updated_time']}}</span>
                     </div>
                     <div class="post-content">
-                        {{ $row->content }}
+                        {{ $row['content'] }}
                     </div>
                 </div>
             @endforeach

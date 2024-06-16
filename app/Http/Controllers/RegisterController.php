@@ -6,10 +6,17 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
-use App\Models\Register;
+use App\Services\UserService;
 
 class RegisterController extends Controller
 {
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      *  註冊頁面
      */
@@ -35,11 +42,11 @@ class RegisterController extends Controller
     {
         try
         {
-            $name = $request->input("name");
+            $user_name = $request->input("name");
             $email = $request->input("email");
             $password = $request->input("password");
 
-            $results = Register::register($name, $email, $password);
+            $results = $this->userService->register($user_name, $email, $password);
         }
         catch(\Exception $e)
         {

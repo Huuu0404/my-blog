@@ -191,17 +191,17 @@
                 <div class="post">
                     <div class="post-author">
                         <img src="{{ asset('images/black_dog.jpg') }}" alt="Profile Photo" class="author-profile-photo">
-                        {{ $row->user_name }}
-                        <span class="post-date">{{ $row->updated_time }}</span>
-                        <img src="{{ asset('images/edit.png') }}" alt="Edit" class="edit-post" data-modal="modal-{{ $index }}" posts-id="{{$row->id}}">
-                        <img src="{{ asset('images/delete.png') }}" alt="Delete" class="delete-post" data-modal="modal-delete-{{ $index }}" posts-id="{{$row->id}}">
+                        {{ $row['user_name'] }}
+                        <span class="post-date">{{ $row['updated_time'] }}</span>
+                        <img src="{{ asset('images/edit.png') }}" alt="Edit" class="edit-post" data-modal="modal-{{ $index }}" posts-id="{{$row['id']}}">
+                        <img src="{{ asset('images/delete.png') }}" alt="Delete" class="delete-post" data-modal="modal-delete-{{ $index }}" posts-id="{{$row['id']}}">
                     </div>
                     <div class="post-content">
-                        {{ $row->content }}
+                        {{ $row['content'] }}
                     </div>
                 </div>
                 <!--Edit Modal -->
-                <div id="modal-{{ $index }}" class="modal" posts-id="{{$row->id}}">
+                <div id="modal-{{ $index }}" class="modal" posts-id="{{$row['id']}}">
                     <div class="modal-content">
                         <div class="modal-header">
                             <span class="close">&times;</span>
@@ -216,7 +216,7 @@
                     </div>
                 </div>
                 <!-- Delete Modal -->
-                <div id="modal-delete-{{ $index }}" class="modal" posts-id="{{$row->id}}">
+                <div id="modal-delete-{{ $index }}" class="modal" posts-id="{{$row['id']}}">
                     <div class="modal-content">
                         <div class="modal-header">
                             <span class="close">&times;</span>

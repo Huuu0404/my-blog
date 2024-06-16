@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Blog;
+use App\Services\PostService;
 
 
-class BlogController extends Controller
+class PostController extends Controller
 {
+    protected $postService;
+
+    public function __construct(PostService $postService)
+    {
+        $this->postService = $postService;
+    }
+
     /**
      *  Whats new! 頁面
      */
@@ -17,7 +22,7 @@ class BlogController extends Controller
     {
         try
         {
-            $list = Blog::whatsNewList();
+            $list = $this->postService->whatsNewList();
         }
         catch(\Exception $e)
         {
@@ -37,7 +42,7 @@ class BlogController extends Controller
     {
         try
         {
-            $list = Blog::myWorldList();
+            $list = $this->postService->myWorldList();
         }
         catch(\Exception $e)
         {
@@ -53,13 +58,13 @@ class BlogController extends Controller
     /**
      *  ajax - 建立貼文
      */
-    public function createPosts(Request $request)
+    public function createPost(Request $request)
     {
         try
         {
             $content = $request->input("content");
 
-            $post_id = Blog::createPosts($content);
+            $post_id = $this->postService->createPost($content);
         }
         catch(\Exception $e)
         {
@@ -73,14 +78,14 @@ class BlogController extends Controller
     /**
      *  ajax - 編輯貼文
      */
-    public function updatePosts(Request $request)
+    public function updatePost(Request $request)
     {
         try
         {
             $post_id = (int) $request->input("post_id");
             $content = $request->input("content");
 
-            Blog::updatePosts($post_id, $content);
+            $this->postService->updatePost($post_id, $content);
         }
         catch(\Exception $e)
         {
@@ -94,13 +99,13 @@ class BlogController extends Controller
     /**
      *  ajax - 刪除貼文
      */
-    public function deletePosts(Request $request)
+    public function deletePost(Request $request)
     {
         try
         {
             $post_id = (int) $request->input("post_id");
 
-            Blog::deletePosts($post_id);
+            $this->postService->deletePost($post_id);
         }
         catch(\Exception $e)
         {
