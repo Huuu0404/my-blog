@@ -1,6 +1,6 @@
 # my-blog
 My framework:
-Route -> Controller -> Service -> Repository -> Model
+Route -> Controller -> Service -> (Interface) ->Repository -> Model
 
 <img width="1440" alt="login" src="https://github.com/Huuu0404/my-blog/assets/159526910/3570c41f-949f-4355-a9ab-415999c2e22b">
 
