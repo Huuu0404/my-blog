@@ -1,5 +1,5 @@
 # my-blog
-Basic CRUD message system
+Basic CRUD message system based on Laravel
 
 My framework:
 Route -> Controller -> Service -> (Interface) ->Repository -> Model
