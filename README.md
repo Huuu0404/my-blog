@@ -1,4 +1,6 @@
 # my-blog
+Basic CRUD message system
+
 My framework:
 Route -> Controller -> Service -> (Interface) ->Repository -> Model
 
