@@ -3,20 +3,31 @@
 namespace App\Services;
 
 use App\Repositories\PostRepositoryInterface;
+use App\Repositories\LikeActionRepositoryInterface;
 
 class PostService
 {
-    protected $postRepository;  
+    protected $postRepository;
+    protected $likeActionRepository;  
 
-    public function __construct(PostRepositoryInterface $postRepository)
+    public function __construct(PostRepositoryInterface $postRepository, LikeActionRepositoryInterface $likeActionRepository)
     {
         $this->postRepository = $postRepository;
+        $this->likeActionRepository = $likeActionRepository;
     }
 
 
     public function whatsNewList()
     {
-        return $this->postRepository->whatsNewList();
+        $post_list =  $this->postRepository->whatsNewList();
+
+        foreach($post_list as &$post)
+        {
+            $post['like_count'] = $this->likeActionRepository->getLikeCountByPostId($post['id']);
+            $post['is_like'] = $this->likeActionRepository->isLike($post['id']);
+        }
+
+        return $post_list;
     }
 
 

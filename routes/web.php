@@ -6,7 +6,7 @@ use App\Http\Controllers\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LogoutController;
-
+use App\Http\Controllers\LikeActionController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'loginIndex'); //登入頁面
@@ -25,6 +25,11 @@ Route::controller(PostController::class)->group(function () {
     Route::post('/posts/create', 'createPost'); // ajax - 建立貼文
     Route::post('/posts/update', 'updatePost'); // ajax - 編輯貼文
     Route::post('/posts/delete', 'deletePost'); // ajax - 刪除貼文
+});
+
+Route::controller(LikeActionController::class)->group(function () {
+    Route::post('/like/create', 'createLike'); // ajax - 按愛心
+    Route::post('/like/delete', 'deleteLike'); // ajax - 收回愛心
 });
 
 Route::controller(LogoutController::class)->group(function () {

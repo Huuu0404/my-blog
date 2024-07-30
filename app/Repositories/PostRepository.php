@@ -32,10 +32,12 @@ class PostRepository implements PostRepositoryInterface
 
     public function createPost($content)
     {
+        $user_id = Session::get('user_id');
         $user_name = Session::get('user_name');
         $email  = Session::get('user_email');
 
         $post = Post::create([
+            'user_id' => $user_id,
             'user_name' => $user_name,
             'email' => $email,
             'content' => $content,

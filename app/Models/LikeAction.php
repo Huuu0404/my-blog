@@ -14,5 +14,17 @@ class LikeAction extends Model
     protected $fillable = [
         'user_name',
         'post_id',
+        'user_id',
     ];
+
+    // 定義關聯
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

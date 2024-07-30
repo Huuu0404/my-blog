@@ -16,4 +16,15 @@ class User extends Model
         'created_at',
         'updated_at'
     ];
+
+    // 定義關聯
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(LikeAction::class);
+    }
 }

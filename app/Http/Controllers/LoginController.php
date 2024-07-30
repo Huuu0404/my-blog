@@ -47,7 +47,11 @@ class LoginController extends Controller
             $email = $request->input("email");
             $password = $request->input("password");
 
-            $this->userService->login($email, $password);
+            $login_results = $this->userService->login($email, $password);
+            if(isset($login_results['error_message']))
+            {
+                return $login_results['error_message'];
+            }
         }
         catch(\Exception $e)
         {

@@ -101,16 +101,21 @@
                         {{ $row['content'] }}
                     </div>
                     <div class="post-actions">
-                        <button class="like-button" onclick="toggleLike(this)">
-                            <img src="{{ asset('images/heart_outline.png') }}" alt="Like" class="like-icon">
+                        <button class="like-button {{ $row['is_like'] ? 'liked' : '' }}" onclick="toggleLike(this)">
+                            @if($row['is_like'])
+                                <img src="{{ asset('images/heart_filled.png') }}" alt="Like" class="like-icon">
+                            @else
+                                <img src="{{ asset('images/heart_outline.png') }}" alt="Like" class="like-icon">
+                            @endif
                         </button>
-                        <span class="like-count">0</span>
+                        <span class="like-count">{{ $row['like_count'] }}</span>
                     </div>
                 </div>
             @endforeach
         </div>
     </div>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function toggleLike(button) {
             const post = button.closest('.post');
@@ -124,24 +129,46 @@
                 likeIcon.src = "{{ asset('images/heart_outline.png') }}";
                 likeCount -= 1;
                 button.classList.remove('liked');
-            } else {
+
+                $.ajax({
+                    url: '/like/delete',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        post_id: postId
+                    },
+                    success: function(response) {
+                        //
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
+            }
+            else
+            {
                 // Like
                 likeIcon.src = "{{ asset('images/heart_filled.png') }}";
                 likeCount += 1;
                 button.classList.add('liked');
+
+                $.ajax({
+                    url: '/like/create',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        post_id: postId
+                    },
+                    success: function(response) {
+                        //
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                    }
+                });
             }
 
             likeCountElement.textContent = likeCount;
-
-            // Send the like/unlike request to the server
-            fetch(`/toggle-like/${postId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ liked: button.classList.contains('liked') })
-            });
         }
     </script>
 </body>

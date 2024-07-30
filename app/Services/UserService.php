@@ -70,6 +70,10 @@ class UserService
         Session::put('user_name', $user->user_name);
         Session::put('user_email', $user->email);
 
-        return null;
+        return [
+            'user_id' => Session::get('user_id'),
+            'user_name' => Session::get('user_name'),
+            'user_email' => Session::get('user_email'),
+        ];
     }
 }
