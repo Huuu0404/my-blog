@@ -42,4 +42,17 @@ class UserRepository implements UserRepositoryInterface
 
         return $user;
     }
+
+
+    public function getUserNameByUserId($user_id)
+    {
+        $user = User::find($user_id);
+
+        if ($user)
+        {
+            return $user->user_name;
+        }
+    
+        return "None";
+    }
 }

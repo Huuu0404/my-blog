@@ -19,9 +19,9 @@ class PostRepository implements PostRepositoryInterface
     
     public function myWorldList()
     {
-        $user_name = Session::get("user_name");
+        $user_id = Session::get("user_id");
 
-        $results = Post::where('user_name', $user_name)
+        $results = Post::where('user_id', $user_id)
         ->orderBy('updated_time','desc')
         ->get()
         ->toArray();
@@ -81,5 +81,17 @@ class PostRepository implements PostRepositoryInterface
         {
             $post->delete();
         }
+    }
+
+
+    public function getUserIdByPostId($post_id)
+    {
+        $post = Post::find($post_id);
+
+        if ($post) {
+            return $post->user_id;
+        }
+    
+        return "Can't find user_id"; 
     }
 }

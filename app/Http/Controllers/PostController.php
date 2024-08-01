@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\PostService;
-
+use App\Services\NotificationService;
 
 class PostController extends Controller
 {
     protected $postService;
+    protected $notificationService;
 
-    public function __construct(PostService $postService)
+    public function __construct(PostService $postService, NotificationService $notificationService)
     {
         $this->postService = $postService;
+        $this->notificationService = $notificationService;
     }
 
     /**
@@ -23,6 +25,8 @@ class PostController extends Controller
         try
         {
             $list = $this->postService->whatsNewList();
+            $notification = $this->notificationService->getNotification();
+            $unread_counts = $this->notificationService->getUnreadCount();
         }
         catch(\Exception $e)
         {
@@ -30,6 +34,8 @@ class PostController extends Controller
         }
 
         $view_data['list'] = $list;
+        $view_data['notification'] = $notification;
+        $view_data['unread_counts'] = $unread_counts;
 
         return view("whats_new", $view_data);
     }
@@ -43,6 +49,9 @@ class PostController extends Controller
         try
         {
             $list = $this->postService->myWorldList();
+            $notification = $this->notificationService->getNotification();
+            $unread_counts = $this->notificationService->getUnreadCount();
+
         }
         catch(\Exception $e)
         {
@@ -50,6 +59,8 @@ class PostController extends Controller
         }
 
         $view_data['list'] = $list;
+        $view_data['notification'] = $notification;
+        $view_data['unread_counts'] = $unread_counts;
 
         return view("my_world", $view_data);
     }

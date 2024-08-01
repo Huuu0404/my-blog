@@ -7,16 +7,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\LikeActionController;
+use App\Http\Controllers\NotificationController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/login', 'loginIndex'); //登入頁面
     Route::post('/login', 'login'); // ajax - 登入驗證
 });
 
+
 Route::controller(RegisterController::class)->group(function () {
     Route::get('/register', 'registerIndex'); //註冊頁面
     Route::post('/register', 'register'); // ajax - 註冊帳號
 });
+
 
 Route::controller(PostController::class)->group(function () {
     Route::get('/whats_new', 'whatsNew'); //whats new頁面
@@ -27,10 +30,19 @@ Route::controller(PostController::class)->group(function () {
     Route::post('/posts/delete', 'deletePost'); // ajax - 刪除貼文
 });
 
+
 Route::controller(LikeActionController::class)->group(function () {
     Route::post('/like/create', 'createLike'); // ajax - 按愛心
     Route::post('/like/delete', 'deleteLike'); // ajax - 收回愛心
 });
+
+
+Route::controller(NotificationController::class)->group(function () {
+    Route::post('/readNotification', 'readNotification'); // ajax - 已讀通知
+    Route::post('/getNotification', 'getNotification'); // ajax - 獲取通知列表
+    Route::post('/getUnreadCount', 'getUnreadCount'); // ajax - 獲取未讀通知數量
+});
+
 
 Route::controller(LogoutController::class)->group(function () {
     Route::get('/logout', 'logout'); // ajax - 登出

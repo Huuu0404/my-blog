@@ -112,22 +112,18 @@
     <div class="menu-items">
         <div class="notification-icon" onclick="toggleNotifications()">
             <img src="{{ asset('images/notification.png') }}" alt="Notifications">
-            <span class="notification-count">3</span> <!-- Example count -->
+            @if($unread_counts > 0)
+                <span class="notification-count">{{ $unread_counts }}</span>
+            @endif
         </div>
         <div class="notification-list">
-            <div class="notification-item unread">
-                <div class="notification-content">New comment on your post</div>
-                <div class="notification-time">2 minutes ago</div>
-            </div>
-            <div class="notification-item unread">
-                <div class="notification-content">You have a new follower</div>
-                <div class="notification-time">10 minutes ago</div>
-            </div>
-            <div class="notification-item unread">
-                <div class="notification-content">New like on your post</div>
-                <div class="notification-time">30 minutes ago</div>
-            </div>
-        </div>
+            @foreach($notification as $row)
+                <div class="notification-item {{ $row['is_read'] == 0 ? 'unread' : '' }}" data-id="{{ $row['id'] }}">
+                    <div class="notification-content">{{ $row['content'] }}</div>
+                    <div class="notification-time">{{ \Carbon\Carbon::parse($row['created_at'])->format('Y-m-d H:i:s') }}</div>
+                </div>
+            @endforeach
+        </div>        
         <a href="/whats_new" class="menu-item">What’s new!</a>
         <a href="/my_world" class="menu-item">My world</a>
         <a href="/logout" class="menu-item">Logout</a>
@@ -141,26 +137,81 @@
         notificationList.toggleClass('active');
         
         if (!notificationList.hasClass('active')) {
-            // 清除通知計數並隱藏
+            const unreadNotificationIds = [];
+            $('.notification-item.unread').each(function() {
+                unreadNotificationIds.push($(this).data('id'));
+            });
+
+            if(unreadNotificationIds.length > 0)
+            {
+                $.ajax({
+                    url: '/readNotification',
+                    method: 'POST',
+                    data: {
+                        notification_ids: unreadNotificationIds,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        console.log(response.message);
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
             $('.notification-count').text(0).hide();
-            
-            // 移除所有通知項的未讀狀態
             $('.notification-item.unread').removeClass('unread');
         }
     }
 
-    $(document).on('click', function(event) {
-        if (!$(event.target).closest('.notification-icon').length && !$(event.target).closest('.notification-list').length) {
-            const notificationList = $('.notification-list');
-            if (notificationList.hasClass('active')) {
-                notificationList.removeClass('active');
+    function getNotification() {
+        $.ajax({
+            url: '/getNotification',
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                $('.notification-list').empty();
+                let unreadCount = 0;
 
-                // 清除通知計數並隱藏
-                $('.notification-count').text(0).hide();
-                
-                // 移除所有通知項的未讀狀態
-                $('.notification-item.unread').removeClass('unread');
+                response.forEach(notification => {
+                    const itemClass = notification.is_read ? '' : 'unread';
+                    const date = new Date(notification.created_at);
+                    const formattedDate = date.getFullYear() + '-' +
+                                        String(date.getMonth() + 1).padStart(2, '0') + '-' +
+                                        String(date.getDate()).padStart(2, '0') + ' ' +
+                                        String(date.getHours()).padStart(2, '0') + ':' +
+                                        String(date.getMinutes()).padStart(2, '0') + ':' +
+                                        String(date.getSeconds()).padStart(2, '0');
+
+                    $('.notification-list').append(`
+                        <div class="notification-item ${itemClass}" data-id="${notification.id}">
+                            <div class="notification-content">${notification.content}</div>
+                            <div class="notification-time">${formattedDate}</div>
+                        </div>
+                    `);
+
+                    if (!notification.is_read) {
+                        unreadCount++;
+                    }
+                });
+
+                if (unreadCount > 0) {
+                    $('.notification-count').text(unreadCount).show();
+                } else {
+                    $('.notification-count').text(0).hide();
+                }
+                console.log(unreadCount);
+            },
+            error: function(xhr) {
+                console.error(xhr.responseText);
             }
-        }
+        });
+    }
+
+    $(document).ready(function() {
+        setInterval(getNotification, 1000);
     });
 </script>

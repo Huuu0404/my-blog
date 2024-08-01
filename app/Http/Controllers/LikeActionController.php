@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\LikeActionService;
+use App\Events\LikeCreated;
+use Illuminate\Support\Facades\Session;
 
 
 class LikeActionController extends Controller
@@ -26,6 +28,9 @@ class LikeActionController extends Controller
             $post_id = $request->input("post_id");
 
             $like_action_id = $this->LikeActionService->createLike($post_id);
+
+            $user_id = Session::get('user_id');
+            event(new LikeCreated($post_id, $user_id));
         }
         catch(\Exception $e)
         {
