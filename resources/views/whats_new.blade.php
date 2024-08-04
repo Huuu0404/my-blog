@@ -160,7 +160,7 @@
                         post_id: postId
                     },
                     success: function(response) {
-                        //
+                        //pass
                     },
                     error: function(xhr, status, error) {
                         console.error(error);

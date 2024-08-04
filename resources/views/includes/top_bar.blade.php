@@ -130,7 +130,9 @@
     </div>
 </div>
 
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
     function toggleNotifications() {
         const notificationList = $('.notification-list');
@@ -203,7 +205,7 @@
                 } else {
                     $('.notification-count').text(0).hide();
                 }
-                console.log(unreadCount);
+                console.log("unreadCount : ", unreadCount);
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
@@ -211,7 +213,20 @@
         });
     }
 
-    $(document).ready(function() {
-        setInterval(getNotification, 1000);
+    // Initialize Pusher
+    Pusher.logToConsole = true;
+
+    var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+        cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
     });
+
+    var channel = pusher.subscribe('my-channel');
+    channel.bind('my-event', function(data) {
+        console.log(data);
+        getNotification();
+    });
+
+    // $(document).ready(function() {
+    //     setInterval(getNotification, 1000);
+    // });
 </script>
