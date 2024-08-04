@@ -195,7 +195,7 @@
                         </div>
                     `);
 
-                    if (!notification.is_read) {
+                    if (notification.is_read == 0) {
                         unreadCount++;
                     }
                 });
@@ -205,7 +205,7 @@
                 } else {
                     $('.notification-count').text(0).hide();
                 }
-                console.log("unreadCount : ", unreadCount);
+                console.log(unreadCount);
             },
             error: function(xhr) {
                 console.error(xhr.responseText);
@@ -226,7 +226,4 @@
         getNotification();
     });
 
-    // $(document).ready(function() {
-    //     setInterval(getNotification, 1000);
-    // });
 </script>
