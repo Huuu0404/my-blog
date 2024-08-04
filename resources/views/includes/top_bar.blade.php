@@ -112,9 +112,9 @@
     <div class="menu-items">
         <div class="notification-icon" onclick="toggleNotifications()">
             <img src="{{ asset('images/notification.png') }}" alt="Notifications">
-            @if($unread_counts > 0)
-                <span class="notification-count">{{ $unread_counts }}</span>
-            @endif
+            <div class="notification-count" style="display: {{ $unread_counts > 0 ? 'inline' : 'none' }}">
+                {{ $unread_counts }}
+            </div>
         </div>
         <div class="notification-list">
             @foreach($notification as $row)
